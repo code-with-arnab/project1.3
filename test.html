@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    PRODUCT
+  </title>
+  <style>
+    .in_put{
+      border:2px solid blue;
+      text-align: center;
+      padding: 25px;
+      background: lightblue;
+      margin-top: 10px;
+      width: 800px;
+      margin-left: 200px;
+
+
+    }
+    #input{
+      width: 600px;
+      padding: 10px;
+      border:2px solid red;
+      
+    }
+    .right{
+      margin-left: 350px;
+      margin-top: 10px;
+      
+     
+    }
+  </style>
+
+</head>
+<body onload="body()">
+<div class="in_put">
+  <input type="text" name="input" id="input" placeholder="enter your product name"onkeyup="searchbytitle()">
+
+</div>
+
+<div class="right">
+  <div id="result"></div>
+  <div id="error"></div>
+</div>
+
+
+
+
+
+  
+<script>
+
+function body(){
+    $.ajax({
+        url:"https://fakestoreapi.com/products",
+        method:"get",
+        data:{},
+        success:function(response)
+        {
+            var alldata=response;
+            var temp="<ol id='oltitle'>";
+            for (i=0;i<alldata.length;i++){
+                temp+="<li>"+'<h4>'+alldata[i].title+'</h4>'+"<br>"+`<img width="200" height="150" src=${alldata[i].image}>`+"<p style=color:red;>"+"price is="+alldata[i].price+"</p>"+"<hr>"+"</li>"
+            }
+            temp+="</ol>";
+            document.getElementById('result').innerHTML= temp;
+        }
+    })
+}
+
+function searchbytitle(){
+
+    var user_input=document.getElementById('input').value
+
+    var oltitle=document.getElementById('oltitle')//tergate all ol
+
+    var alltitle=oltitle.getElementsByTagName('li')//tergate all li
+
+    var flag=0
+
+    for(i=0;i<alltitle.length;i++){
+        var title=alltitle[i].querySelector('h4').innerHTML;
+        
+        var input_len=user_input.length
+
+        var str=title.substring(0,input_len)
+
+        if (str.toLowerCase()== user_input.toLowerCase()){
+            alltitle[i].style.display=" ";
+            flag=1;
+        }
+        else{
+            alltitle[i].style.display="none";
+        }
+    }
+    if(flag===0){
+        document.getElementById('error').innerHTML="no data"
+    }
+    else{
+        document.getElementById('error').innerHTML=" ";
+    }
+}
+
+
+</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</body>
+</html>
+
